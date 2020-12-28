@@ -1,27 +1,23 @@
-# Ai704
+# ai-704
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.1.
+this is a repro for https://github.com/microsoft/ApplicationInsights-node.js/issues/704
 
-## Development server
+commits are the same as in original issue description, e.g.:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- `ng new` [4b019e1](https://github.com/mac2000/ai-704/commit/4b019e1)
+- add some api calls [ba7d369](https://github.com/mac2000/ai-704/commit/ba7d369)
+- `ng add @nguniversal/express-engine` [7ec12cc](https://github.com/mac2000/ai-704/commit/7ec12cc)
+- add and configure appinsights [7c110aa](https://github.com/mac2000/ai-704/commit/7c110aa)
 
-## Code scaffolding
+for test:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+git clone https://github.com/mac2000/ai-704
+cd ai-704
+npm install
+export APPINSIGHTS_INSTRUMENTATIONKEY=your-instumentation-key
+npm run dev:ssr
+open localhost:4200
+```
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+after a while you shold see both requests and dependencies in appinsights portal, but because dependencies have no correlation they wont be attached to requests
