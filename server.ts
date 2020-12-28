@@ -8,6 +8,10 @@ import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import { existsSync } from 'fs';
 
+import * as applicationInsights from 'applicationinsights'
+applicationInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY).start()
+applicationInsights.defaultClient.config.maxBatchSize = 0;
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
   const server = express();
