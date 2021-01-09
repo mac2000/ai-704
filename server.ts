@@ -1,3 +1,18 @@
+import * as applicationInsights from 'applicationinsights'
+applicationInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY).start()
+applicationInsights.defaultClient.config.maxBatchSize = 0;
+applicationInsights.defaultClient.addTelemetryProcessor((envelope, context) => {
+  if (envelope.name.indexOf('RemoteDependency') !== -1) {
+    console.log({
+      name: envelope.name,
+      tags: envelope.tags,
+      data: envelope.data['baseData'],
+      correlationContext: context.correlationContext
+    })
+  }
+  return true
+})
+
 import 'zone.js/dist/zone-node';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
@@ -7,10 +22,8 @@ import { join } from 'path';
 import { AppServerModule } from './src/main.server';
 import { APP_BASE_HREF } from '@angular/common';
 import { existsSync } from 'fs';
+import { env } from 'process';
 
-import * as applicationInsights from 'applicationinsights'
-applicationInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY).start()
-applicationInsights.defaultClient.config.maxBatchSize = 0;
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
@@ -35,6 +48,7 @@ export function app() {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
+    console.log(`[expressjs]: got request ${req.url}`)
     res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
   });
 

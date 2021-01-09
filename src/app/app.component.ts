@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    console.log('[angular]: retrieving todo from app.component.ts')
     this.http.get('https://jsonplaceholder.typicode.com/todos/1').subscribe(todo => this.title = todo['title'])
   }
 }
